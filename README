@@ -1,0 +1,14 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=3697
+
+Generate empty CSS blocks from HTML. Requires cURL.
+
+Homepage: http://designtomarkup.com/vim/work-with-external-css-tools#cssbaseline.vim
+
+Git repository: https://github.com/kien/cssbaseline.vim
+
+====================
+Usage:
+====================
++ Select a block of HTML from the opening to the closing tag and type either :Baseline or :Baseline1.
+
++ The retrieved CSS will be copied to your clipboard (* register), ready to be pasted.
