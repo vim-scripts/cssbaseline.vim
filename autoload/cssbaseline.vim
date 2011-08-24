@@ -44,12 +44,20 @@ func! cssbaseline#init(l1,l2,...)
 	exe line2
 	norm! "*y
 	try
-		let html = substitute(substitute(@*, '\n', '', 'g'), '\s\+', ' ', 'g')
-		let html = escape(substitute(substitute(html, '<!--[^>]\+-->', '', 'g'), '>[^<]\+<', '><', 'g'), '"')
+		let html = substitute(@*, '\n', '', 'g')
+		let html = substitute(html, '\s\+', ' ', 'g')
+		let html = substitute(html, '<!--[^>]\+-->', '', 'g')
+		let html = substitute(html, '>[^<]\+<', '><', 'g')
+		let html = substitute(html, '&', '', 'g')
+		let html = escape(html, '"')
 		let page = system('curl '.g:cssbaseline_curl.' -sS'.enc.' "'.va.'='.html.'" '.sites[a1])
-		let css = matchstr(substitute(page, '\n', '', 'g'), '<textarea[^>]\+>\zs[^<]\+\ze</textarea>')
-		let css = substitute(substitute(css, '/\*[^*/]\+\*/', '', 'g'), '}', '}\n', 'g')
-		let @* = substitute(substitute(css, '\n\s\+', '\n', 'g'), '{\s*', '{', 'g')
+		let page = substitute(page, '\n', '', 'g')
+		let css = matchstr(page, '<textarea[^>]\+>\zs[^<]\+\ze</textarea>')
+		let css = substitute(css, '/\*[^*/]\+\*/', '', 'g')
+		let css = substitute(css, '}', '}\n', 'g')
+		let css = substitute(css, '\n\s\+', '\n', 'g')
+		let css = substitute(css, '\(^\|\n\| \)\w\+\(\.\|#\)', '\1\2', 'g')
+		let @* = substitute(css, '{\s*', '{', 'g')
 	catch
 		echohl Error
 		echo 'An error occurred, probably E484. Try selecting less HTML.'
