@@ -1,7 +1,6 @@
 " ============================================================
 " File:          cssbaseline.vim
-" Description:   Interfacing with css-generator and primercss
-"                to create a CSS baseline
+" Description:   Build empty CSS blocks from HTML
 " Author:        Kien Nguyen <info@designtomarkup.com>
 " License:       MIT
 " Repository:    https://github.com/kien/cssbaseline.vim

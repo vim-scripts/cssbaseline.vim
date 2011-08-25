@@ -1,7 +1,6 @@
 " ============================================================
 " File:          cssbaseline.vim
-" Description:   Interfacing with css-generator and primercss
-"                to create a CSS baseline
+" Description:   Build empty CSS blocks from HTML
 " Author:        Kien Nguyen <info@designtomarkup.com>
 " License:       MIT
 " Repository:    https://github.com/kien/cssbaseline.vim
@@ -49,6 +48,7 @@ func! cssbaseline#init(l1,l2,...)
 		let html = substitute(html, '<!--[^>]\+-->', '', 'g')
 		let html = substitute(html, '>[^<]\+<', '><', 'g')
 		let html = substitute(html, '&', '', 'g')
+		let html = substitute(html, '<\(link\|meta\|input\|img\|param\|br\|hr\)\([^<>/]*\)>', '<\1\2 />', 'g')
 		let html = escape(html, '"')
 		let page = system('curl '.g:cssbaseline_curl.' -sS'.enc.' "'.va.'='.html.'" '.sites[a1])
 		let page = substitute(page, '\n', '', 'g')
@@ -58,10 +58,15 @@ func! cssbaseline#init(l1,l2,...)
 		let css = substitute(css, '\n\s\+', '\n', 'g')
 		let css = substitute(css, '\(^\|\n\| \)\w\+\(\.\|#\)', '\1\2', 'g')
 		let @* = substitute(css, '{\s*', '{', 'g')
-	catch
+	catch /E484/
 		echohl Error
 		echo 'An error occurred, probably E484. Try selecting less HTML.'
 		echohl None
+	finally
+		if !empty(@*)
+			redr
+			echo 'Clipboard''s ready.'
+		endif
 	endtry
 endfunc
 
